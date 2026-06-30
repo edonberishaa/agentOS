@@ -62,9 +62,31 @@ Findings from Phase 4 Day 1 testing, status as of Day 2:
 - ~~`context_packs.documents`/`.constraints` are unconditionally empty ... the actual handoff *content* string is never persisted anywhere~~ — **fixed Day 2**: `context_packs` gained a `content TEXT` column (schema + migration guard in `database.py`), `build_handoff_pack()` persists the sanitized handoff string into it, and `GET /context/pack/{pack_id}` (`routers/context.py`) now returns it instead of raising `NotImplementedError`. `documents`/`constraints` are still unconditionally `[]` — that's a separate, not-yet-scoped gap (the document-vault side of context packs, see "Not yet implemented" below).
 - `GET /inbox` has no orphan-run detection — a `running` task survives a simulated gateway restart with its status intact (verified in `test_gateway_restart.py`), but nothing flags it as needing attention if the process that was supposed to be running it is actually gone. Scenario 5 from the `testing` skill explicitly anticipated this gap. **Deferred to post-v1** — it's blocked on a process spawner existing at all (see below), so there's nothing real to detect orphaning of yet.
 
-## Phase 5 — Release Preparation: NOT STARTED (Week 4, Days 4-5)
+## Phase 5 — Release Preparation: COMPLETE (Week 4, Days 4-5)
 
-Starts with: dashboard implementation (apps/dashboard is currently scaffolding only) and CLI command completion (all commands except `init`/`daemon` are still stubbed). Does **not** include a process spawner — that's a separate, larger effort (v2 / a possible Phase 6), not part of Phase 5's release-prep scope.
+All deliverables shipped. `v0.1.0` tagged on commit `87c0de6`.
+
+| Deliverable | Status |
+|---|---|
+| Ruff cleanup (adapters/ UP035/E501/SIM105) | DONE — ruff check returns zero findings across the full tree |
+| Dashboard MVP — 4 pages | DONE — `/` (Mission Control), `/inbox`, `/timeline`, `/health` all built, polling + SSE |
+| CLI — all commands | DONE — all 20 commands fully implemented, every subcommand has --help text |
+| Documentation | DONE — README.md, docs/architecture.md, docs/cli-reference.md, docs/adapters.md |
+| Release checklist | ALL PASS — see below |
+
+### Release checklist final state
+
+- [x] `pnpm build` — zero errors (dashboard: 4 static routes, CLI: tsc clean, shared: tsc clean)
+- [x] `pnpm typecheck` — zero errors across all 3 TS packages
+- [x] `pytest` — 16/16 passed, 0 failed
+- [x] `ruff check` — zero findings (29 source files)
+- [x] `mypy --strict` — zero errors (29 source files)
+- [x] All CLI commands have `--help` text — verified via `node dist/index.js <cmd> --help`
+- [x] `.gitignore` covers `.secrets/`, `runs/`, `workspaces/`, `approvals/`, `*.db`
+- [x] No hardcoded `localhost:47821` in dashboard outside `lib/gateway.ts` (uses `NEXT_PUBLIC_GATEWAY_URL`)
+- [x] All 4 dashboard pages compile and render (verified via `next build`)
+- [x] `v0.1.0` git tag created (annotated, on initial commit `87c0de6`)
+- [x] `CHANGELOG.md` written with v0.1.0 entry
 
 Known deferred items (post-v1, not Phase 5 scope):
 - Orphan-run detection in `/inbox` — blocked on a process spawner existing.
@@ -91,4 +113,4 @@ Before implementing a feature, fixing a stub, or scoping out work: check which p
 If a deliverable listed as "stubbed" or "not implemented" above turns out to already have real code when you check, the tracker is out of date — update it rather than trusting it blindly.
 
 ---
-*Last updated: 2026-06-25 (Phase 4 complete — Week 4, Day 3 done; Phase 5 not started)*
+*Last updated: 2026-06-30 (Phase 5 complete — v0.1.0 released, all exit criteria met)*

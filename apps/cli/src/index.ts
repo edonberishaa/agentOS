@@ -76,8 +76,9 @@ try {
   await program.parseAsync(process.argv)
 } catch (err: unknown) {
   if (err instanceof Error && err.name === 'CommanderError') {
-    // Commander already printed the error
-    process.exit(1)
+    // Commander already printed the message; use the error's own exit code
+    // (0 for --help/--version, 1 for parse errors).
+    process.exit((err as NodeJS.ErrnoException & { exitCode?: number }).exitCode ?? 1)
   }
   console.error(chalk.red('Unexpected error:'), err)
   process.exit(1)
