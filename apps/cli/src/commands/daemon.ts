@@ -6,8 +6,7 @@
  */
 
 import { existsSync, readFileSync, writeFileSync, unlinkSync } from 'fs'
-import { dirname, join, resolve } from 'path'
-import { fileURLToPath } from 'url'
+import { join } from 'path'
 import { spawn } from 'child_process'
 import type { Command } from 'commander'
 import ora from 'ora'
@@ -59,13 +58,9 @@ async function startDaemon(port?: number): Promise<void> {
     }
   }
 
-  // Resolve gateway module path
-  // In development: packages/gateway/src
-  // In production: installed package
-  const gatewayModule = resolve(
-    dirname(fileURLToPath(import.meta.url)),
-    '../../../../packages/gateway'
-  )
+  // The gateway runs in the user's project directory so resolve_agentos_dir()
+  // finds their .agentos/ (not the one inside the agent-os source repo).
+  const userProjectDir = process.cwd()
 
   const env = {
     ...process.env,
@@ -73,14 +68,14 @@ async function startDaemon(port?: number): Promise<void> {
     AGENTOS_LOG_LEVEL: 'info',
   }
 
-  const logPath = join(process.cwd(), LOG_FILE)
-  const pidPath = join(process.cwd(), PID_FILE)
+  const logPath = join(userProjectDir, LOG_FILE)
+  const pidPath = join(userProjectDir, PID_FILE)
 
   const proc = spawn(
     'python',
     ['-m', 'agentos_gateway'],
     {
-      cwd: gatewayModule,
+      cwd: userProjectDir,
       env,
       detached: true,
       stdio: ['ignore', 'pipe', 'pipe'],
