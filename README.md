@@ -13,6 +13,8 @@ Agent OS turns "ask an AI to write some code" into "plan a mission, assign tasks
 - pnpm >= 9
 - git
 
+**Windows users:** Python 3.11+, Node 20+, pnpm 9+, and Git for Windows are all required. Run in PowerShell or Windows Terminal. WSL2 is supported but not required.
+
 ## Installation
 
 ```bash
@@ -30,9 +32,8 @@ pip install -e ".[dev]"
 cd ../..
 
 # Make `agentos` available globally
-cd apps/cli
-pnpm link --global
-cd ../..
+pnpm --filter @agent-os/cli build
+npm install -g apps/cli
 ```
 
 Set your Anthropic API key if you want mission planning (the planner calls `claude-sonnet-4-6` to decompose an objective into a task DAG):

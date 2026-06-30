@@ -36,15 +36,15 @@ function runInit(force = false): void {
 
   const dirs = [
     AGENTOS_DIR,
-    `${AGENTOS_DIR}/context`,
-    `${AGENTOS_DIR}/context/api-contracts`,
-    `${AGENTOS_DIR}/context/decisions`,
-    `${AGENTOS_DIR}/missions`,
-    `${AGENTOS_DIR}/runs`,
-    `${AGENTOS_DIR}/artifacts`,
-    `${AGENTOS_DIR}/approvals`,
-    `${AGENTOS_DIR}/workspaces`,
-    `${AGENTOS_DIR}/.secrets`,
+    join(AGENTOS_DIR, 'context'),
+    join(AGENTOS_DIR, 'context', 'api-contracts'),
+    join(AGENTOS_DIR, 'context', 'decisions'),
+    join(AGENTOS_DIR, 'missions'),
+    join(AGENTOS_DIR, 'runs'),
+    join(AGENTOS_DIR, 'artifacts'),
+    join(AGENTOS_DIR, 'approvals'),
+    join(AGENTOS_DIR, 'workspaces'),
+    join(AGENTOS_DIR, '.secrets'),
   ]
 
   for (const dir of dirs) {
@@ -55,35 +55,35 @@ function runInit(force = false): void {
   // Write starter files
   const files: { path: string; content: string }[] = [
     {
-      path: `${AGENTOS_DIR}/config.yml`,
+      path: join(AGENTOS_DIR, 'config.yml'),
       content: CONFIG_YML,
     },
     {
-      path: `${AGENTOS_DIR}/agents.yml`,
+      path: join(AGENTOS_DIR, 'agents.yml'),
       content: AGENTS_YML,
     },
     {
-      path: `${AGENTOS_DIR}/policies.yml`,
+      path: join(AGENTOS_DIR, 'policies.yml'),
       content: POLICIES_YML,
     },
     {
-      path: `${AGENTOS_DIR}/context/product.md`,
+      path: join(AGENTOS_DIR, 'context', 'product.md'),
       content: PRODUCT_MD,
     },
     {
-      path: `${AGENTOS_DIR}/context/architecture.md`,
+      path: join(AGENTOS_DIR, 'context', 'architecture.md'),
       content: ARCHITECTURE_MD,
     },
     {
-      path: `${AGENTOS_DIR}/context/constraints.md`,
+      path: join(AGENTOS_DIR, 'context', 'constraints.md'),
       content: CONSTRAINTS_MD,
     },
     {
-      path: `${AGENTOS_DIR}/context/glossary.md`,
+      path: join(AGENTOS_DIR, 'context', 'glossary.md'),
       content: GLOSSARY_MD,
     },
     {
-      path: `${AGENTOS_DIR}/.gitignore`,
+      path: join(AGENTOS_DIR, '.gitignore'),
       content: GITIGNORE,
     },
   ]

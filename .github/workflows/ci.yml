@@ -41,8 +41,11 @@ jobs:
   # Python — lint, typecheck, tests
   # ============================================================
   python:
-    name: Python (ruff + mypy + pytest)
-    runs-on: ubuntu-latest
+    name: Python (ruff + mypy + pytest) — ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     defaults:
       run:
         working-directory: packages/gateway
